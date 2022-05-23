@@ -1,5 +1,6 @@
 const ora = require('ora');
 const app = require('./app');
+const database = require('./database');
 const config = require('./config');
 
 const gracefulShutdown = (msg) => {
