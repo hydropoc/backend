@@ -1,0 +1,31 @@
+{
+    "name": "api-example",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "directories": {
+        "doc": "docs",
+        "lib": "lib",
+        "test": "tests"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "clear": "rm -rf node_modules/ && rm -f package-lock.json && exit 1",
+        "start": "node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/paulus1111/api-example.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/paulus1111/api-example/issues"
+    },
+    "homepage": "https://github.com/paulus1111/api-example#readme",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.17.3",
+        "ora": "^5.4.1"
+    }
+}
