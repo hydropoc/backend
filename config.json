@@ -4,7 +4,7 @@
         "user": "NodeUser",
         "password": "aiqu9ahuh9",
         "database": "HydroPoc",
-        "server": "s-mssql2019.it.gla",
+        "server": "192.168.100.188",
         "options": {
             "encrypt": true,
             "trustServerCertificate": true
