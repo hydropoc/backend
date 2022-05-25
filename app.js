@@ -5,13 +5,15 @@ const cors = require('cors');
 const app = express();
 
 const userRoutes = require('./routes/user_routes');
-const adminRoutes = require('./routes/admin_routes');
+const sensorRoutes = require('./routes/sensor_routes');
+const deviceRoutes = require('./routes/device_routes');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({ origin: '*', allowMethods: ['GET', 'POST', 'PATCH', 'DELETE'], allowHeaders: ['Content-Type', 'Accept'] }));
 
-app.use('/api/users', userRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/sensor', sensorRoutes);
+app.use('/api/device', deviceRoutes);
 
 module.exports = app;
