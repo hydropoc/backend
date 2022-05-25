@@ -24,8 +24,10 @@
     },
     "homepage": "https://github.com/paulus1111/api-example#readme",
     "dependencies": {
+        "bcrypt": "^5.0.1",
         "cors": "^2.8.5",
         "express": "^4.17.3",
+        "express-validator": "^6.14.1",
         "mssql": "^8.1.1",
         "nodemon": "^2.0.16",
         "ora": "^5.4.1"
