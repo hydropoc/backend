@@ -3,6 +3,8 @@ const database = require('./database');
 const app = require('./app');
 const config = require('./config');
 
+const { Worker } = require('worker_threads');
+
 const gracefulShutdown = (msg) => {
     ora().succeed('Shutdown initiated: ' + msg);
     ora().succeed('Shutting down...');
@@ -26,9 +28,11 @@ app.listen(3000, () => {
         }
 
         statusMessageDatabase.succeed('Database connected');
-    });
+        statusMessageBackend.succeed('Backend started on port ' + config.port);
 
-    statusMessageBackend.succeed('Backend started on port ' + config.port);
+        new Worker('./jobs/image_job.js');
+        new Worker('./jobs/plant_job.js');
+    });
 }).on('error', (error) => {
     statusMessageBackend.fail('Backend failed to start (' + error.message + ')');
     process.exit();
