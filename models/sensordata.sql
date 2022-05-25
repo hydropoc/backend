@@ -10,5 +10,6 @@ CREATE TABLE [dbo].[sensordata] (
 	ec_value float NOT NULL,
 	swimmer_1 int NOT NULL,
 	swimmer_2 int NOT NULL,
-	swimmer_3 int NOT NULL
+	swimmer_3 int NOT NULL,
+	timestamp bigint NOT NULL
 );
