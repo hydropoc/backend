@@ -24,6 +24,7 @@
     },
     "homepage": "https://github.com/paulus1111/api-example#readme",
     "dependencies": {
+        "axios": "^0.27.2",
         "bcrypt": "^5.0.1",
         "cors": "^2.8.5",
         "express": "^4.17.3",
