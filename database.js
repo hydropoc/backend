@@ -1,4 +1,5 @@
 const sql = require('mssql');
-const config = require('./config');
+const sqlConfig = require('./config').sqlConfig;
 
 module.exports.sql = sql;
+module.exports.sqlConfig = sqlConfig;
