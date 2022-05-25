@@ -1,16 +1,100 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
+const database = require('./../database');
+const tokenUtils = require('./../tokenUtils');
+const { body, validationResult } = require('express-validator');
+
 const router = express.Router();
+const saltRounds = 10;
 
 router.use((req, res, next) => {
     next();
 });
 
-router.get('/example_1', function (req, res) {
-    res.send('User 1 route');
+router.get('/register', body('username').isLength({ min: 4 }), body('password').isLength({ min: 6 }), (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    bcrypt.hash(req.body['password'], saltRounds, function (hashError, hash) {
+        if (hashError) {
+            return res.status(400).json({ error: 'hash_error_ur' });
+        }
+
+        database.sql.connect(database.sqlConfig).then((pool) => {
+            pool.query("SELECT * FROM [HydroPoc].[dbo].[users] WHERE username = '" + req.body['username'] + "'")
+                .then((result) => {
+                    if (result.recordset.length > 0) {
+                        return res.status(400).json({ error: 'register_user_already_exists' });
+                    }
+
+                    pool.query("INSERT INTO [HydroPoc].[dbo].[users] (username, password, lastlogin) VALUES ('" + req.body['username'] + "', '" + hash + "', 0)")
+                        .then((result) => {
+                            if (result.rowsAffected > 0) {
+                                return res.status(200).json({ success: 'user_created' });
+                                // token todo
+                            } else {
+                                return res.status(400).json({ error: 'register_user_creation_no_rows_affected' });
+                            }
+                        })
+                        .catch((insertError) => {
+                            console.error(insertError);
+                            return res.status(400).json({ error: 'register_user_insert_error' });
+                        });
+                })
+                .catch((selectError) => {
+                    console.error(selectError);
+                    return res.status(400).json({ error: 'register_user_select_error' });
+                });
+        });
+    });
 });
 
-router.get('/example_2', function (req, res) {
-    res.send('User 2 route');
+router.get('/login', body('username').isLength({ min: 4 }), body('password').isLength({ min: 6 }), (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    database.sql.connect(database.sqlConfig).then((pool) => {
+        pool.query("SELECT * FROM [HydroPoc].[dbo].[users] WHERE username = '" + req.body['username'] + "'")
+            .then((result) => {
+                if (result.recordset.length == 0) {
+                    return res.status(400).json({ error: 'register_user_not_exists' });
+                }
+
+                if (result.recordset.length > 1) {
+                    return res.status(400).json({ error: 'register_user_too_many_exists' });
+                }
+
+                bcrypt.compare(req.body['password'], result.recordset[0].password, function (compareError, hashResult) {
+                    if (compareError) {
+                        return res.status(400).json({ error: 'compare_error_ur' });
+                    }
+
+                    if (hashResult)
+                        tokenUtils.checkTokenById(result.recordset[0].id).then((tokenExists) => {
+                            if (tokenExists) {
+                                tokenUtils.getToken(result.recordset[0].id).then((token) => {
+                                    return res.status(200).json({ success: 'user_login', token: token });
+                                });
+                            } else {
+                                tokenUtils.createToken(result.recordset[0].id).then((token) => {
+                                    return res.status(200).json({ success: 'user_login', token: token });
+                                });
+                            }
+                        });
+                    else return res.status(400).json({ error: 'invalid_user_credentials' });
+                });
+            })
+            .catch((selectError) => {
+                console.error(selectError);
+                return res.status(400).json({ error: 'register_user_select_error' });
+            });
+    });
 });
 
 module.exports = router;
