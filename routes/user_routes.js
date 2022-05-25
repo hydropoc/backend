@@ -1,7 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const database = require('./../database');
-const tokenUtils = require('./../tokenUtils');
+const tokenUtils = require('./../lib/tokenUtils');
+const eventUtils = require('./../lib/eventUtils');
 const { body, validationResult } = require('express-validator');
 
 const router = express.Router();
@@ -23,6 +24,8 @@ router.get('/register', body('username').isLength({ min: 4 }), body('password').
             return res.status(400).json({ error: 'hash_error_ur' });
         }
 
+        eventUtils.addEvent('info', 'New register attempt');
+
         database.sql.connect(database.sqlConfig).then((pool) => {
             pool.query("SELECT * FROM [HydroPoc].[dbo].[users] WHERE username = '" + req.body['username'] + "'")
                 .then((result) => {
@@ -33,8 +36,20 @@ router.get('/register', body('username').isLength({ min: 4 }), body('password').
                     pool.query("INSERT INTO [HydroPoc].[dbo].[users] (username, password, lastlogin) VALUES ('" + req.body['username'] + "', '" + hash + "', 0)")
                         .then((result) => {
                             if (result.rowsAffected > 0) {
-                                return res.status(200).json({ success: 'user_created' });
-                                // token todo
+                                pool.query("SELECT * FROM [HydroPoc].[dbo].[users] WHERE username = '" + req.body['username'] + "'")
+                                    .then((result) => {
+                                        if (result.recordset.length > 0) {
+                                            tokenUtils.createToken(result.recordset[0].id).then((token) => {
+                                                return res.status(200).json({ success: 'user_created', token: token });
+                                            });
+                                        } else {
+                                            return res.status(400).json({ error: 'register_user_invalid_length' });
+                                        }
+                                    })
+                                    .catch((selectError) => {
+                                        console.error(selectError);
+                                        return res.status(400).json({ error: 'register_user_selet_error_after_register' });
+                                    });
                             } else {
                                 return res.status(400).json({ error: 'register_user_creation_no_rows_affected' });
                             }
@@ -58,6 +73,8 @@ router.get('/login', body('username').isLength({ min: 4 }), body('password').isL
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+
+    eventUtils.addEvent('info', 'New login attempt');
 
     database.sql.connect(database.sqlConfig).then((pool) => {
         pool.query("SELECT * FROM [HydroPoc].[dbo].[users] WHERE username = '" + req.body['username'] + "'")
