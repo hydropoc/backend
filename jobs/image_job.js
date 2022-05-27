@@ -1,7 +1,10 @@
 const Raspistill = require('node-raspistill').Raspistill;
+const ora = require('ora');
 const eventUtils = require('./../lib/eventUtils');
 
 const camera = new Raspistill();
+
+ora().succeed('[Jobs] Started Image job');
 
 camera
     .takePhoto()
