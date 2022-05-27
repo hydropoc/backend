@@ -1,7 +1,10 @@
+const ora = require('ora');
 const database = require('./../database');
 const gpioUtils = require('./../lib/gpioUtils');
 
-setTimeout(() => {
+ora().succeed('[Jobs] Started Plant job');
+
+setInterval(() => {
     //check sensor values
     //check if some shit is running
     //check sensors
