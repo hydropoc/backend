@@ -1,11 +1,12 @@
 const axios = require('axios');
+var count = 1;
 
 // generate random number between two given values
 function randomNumber(min, max) {
     return (Math.random() * (max - min) + min).toFixed(2);
 }
 
-console.log('Starting adding random data!');
+console.log('Starting adding random data to mssql server!');
 
 setInterval(() => {
     axios
@@ -29,6 +30,10 @@ setInterval(() => {
             }
         )
         .then((res) => {
-            console.log('Added data!');
+            console.log('Added data (' + count + ')');
+            count++;
+        })
+        .catch((error) => {
+            console.error(error);
         });
 }, 500);
