@@ -1,4 +1,5 @@
 {
+    "version": "1.0.0",
     "port": 3000,
     "sqlConfig": {
         "user": "NodeUser",
@@ -9,5 +10,9 @@
             "encrypt": true,
             "trustServerCertificate": true
         }
+    },
+    "lightcycle": {
+        "startTime": "08:00",
+        "endTime": "20:00"
     }
 }
