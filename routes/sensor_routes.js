@@ -1,6 +1,6 @@
 const express = require('express');
-const database = require('./../database');
 const { body, validationResult } = require('express-validator');
+const database = require('./../database');
 
 const router = express.Router();
 
@@ -25,6 +25,25 @@ router.post('/adddata', body('temperature_water').isNumeric(), body('temperature
             .catch((insertError) => {
                 console.error(insertError);
                 return res.status(400).json({ error: 'data_error_adding' });
+            });
+    });
+});
+
+router.get('/data', body('amount').isInt({ min: 1, max: 100 }), (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    database.sql.connect(database.sqlConfig).then((pool) => {
+        pool.query('SELECT TOP ' + req.body.amount + ' * FROM [HydroPoc].[dbo].[sensordata] ORDER BY id DESC')
+            .then((result) => {
+                return res.status(200).json(result.recordset);
+            })
+            .catch((selectError) => {
+                console.error(selectError);
+                return res.status(400).json({ error: 'data_error_reading_sensor' });
             });
     });
 });
