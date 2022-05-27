@@ -1,9 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const { body, validationResult } = require('express-validator');
 const database = require('./../database');
 const tokenUtils = require('./../lib/tokenUtils');
 const eventUtils = require('./../lib/eventUtils');
-const { body, validationResult } = require('express-validator');
 
 const router = express.Router();
 const saltRounds = 10;
@@ -12,7 +12,7 @@ router.use((req, res, next) => {
     next();
 });
 
-router.get('/register', body('username').isLength({ min: 4 }), body('password').isLength({ min: 6 }), (req, res) => {
+router.post('/register', body('username').isLength({ min: 4 }), body('password').isLength({ min: 6 }), (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -40,7 +40,7 @@ router.get('/register', body('username').isLength({ min: 4 }), body('password').
                                     .then((result) => {
                                         if (result.recordset.length > 0) {
                                             tokenUtils.createToken(result.recordset[0].id).then((token) => {
-                                                return res.status(200).json({ success: 'user_created', token: token });
+                                                return res.status(201).json({ success: 'user_created', token: token });
                                             });
                                         } else {
                                             return res.status(400).json({ error: 'register_user_invalid_length' });
