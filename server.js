@@ -2,18 +2,18 @@ const ora = require('ora');
 const database = require('./database');
 const app = require('./app');
 const config = require('./config');
+const eventUtils = require('./lib/eventUtils');
 
 const { Worker } = require('worker_threads');
 
 const gracefulShutdown = (msg) => {
-    ora().succeed('Shutdown initiated: ' + msg);
-    ora().succeed('Shutting down...');
+    eventUtils.addEvent('error', 'Backend stopped with message: ' + msg);
+
+    ora().info('Shutdown initiated: ' + msg);
+    ora().info('Shutting down...');
 
     process.exit();
 };
-
-const statusMessageBackend = ora('Loading backend').start();
-const statusMessageDatabase = ora('Loading database').start();
 
 app.listen(3000, () => {
     process.on('SIGTERM', gracefulShutdown); // Handle kill commands
@@ -23,17 +23,22 @@ app.listen(3000, () => {
 
     database.sql.connect(config.sqlConfig, (error) => {
         if (error) {
-            statusMessageDatabase.fail('Database connection error');
+            ora().fail('Database connection error');
             return gracefulShutdown('Database connection error');
         }
 
-        statusMessageDatabase.succeed('Database connected');
-        statusMessageBackend.succeed('Backend started on port ' + config.port);
+        ora().succeed('Database connected');
+        ora().succeed('Backend started on port ' + config.port);
+        eventUtils.addEvent('success', 'Backend started on port ' + config.port);
+
+        console.log(' ');
 
         new Worker('./jobs/image_job.js');
         new Worker('./jobs/plant_job.js');
+        new Worker('./jobs/lightcycle_job.js');
+        new Worker('./jobs/notification_job.js');
     });
 }).on('error', (error) => {
-    statusMessageBackend.fail('Backend failed to start (' + error.message + ')');
+    ora().fail('Backend failed to start (' + error.message + ')');
     process.exit();
 });
