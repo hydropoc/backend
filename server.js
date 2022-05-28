@@ -1,10 +1,9 @@
 const ora = require('ora');
+const { Worker } = require('worker_threads');
 const database = require('./database');
 const app = require('./app');
 const config = require('./config');
 const eventUtils = require('./lib/eventUtils');
-
-const { Worker } = require('worker_threads');
 
 const gracefulShutdown = (msg) => {
     eventUtils.addEvent('error', 'Backend stopped with message: ' + msg);
