@@ -46,6 +46,7 @@ GET https://api.example.com/v1/test/latest
 
 ## Cron Job Status
 
+<p align="left">
 <img src="https://img.shields.io/badge/Example1-aa-brightgreen"> 
 <img src="https://img.shields.io/badge/Example2-ab-brightgreen">
 <img src="https://img.shields.io/badge/Example3-ac-brightgreen">
@@ -54,6 +55,7 @@ GET https://api.example.com/v1/test/latest
 <img src="https://img.shields.io/badge/Example6-af-brightgreen">
 <img src="https://img.shields.io/badge/Example7-ag-brightgreen">
 <img src="https://img.shields.io/badge/Example8-ah-brightgreen">
+</p>
 
 ## FAQ's
 
