@@ -14,7 +14,7 @@ const gracefulShutdown = (msg) => {
     process.exit();
 };
 
-app.listen(3000, () => {
+app.listen(config.port, () => {
     process.on('SIGTERM', gracefulShutdown); // Handle kill commands
     process.on('SIGINT', gracefulShutdown); // Handle interrupts
     process.on('uncaughtException', gracefulShutdown); // Prevent dirty exit on uncaught exceptions
@@ -35,7 +35,6 @@ app.listen(3000, () => {
         new Worker('./jobs/image_job.js');
         new Worker('./jobs/plant_job.js');
         new Worker('./jobs/lightcycle_job.js');
-        new Worker('./jobs/notification_job.js');
     });
 }).on('error', (error) => {
     ora().fail('Backend failed to start (' + error.message + ')');
