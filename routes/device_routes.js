@@ -1,6 +1,5 @@
 const express = require('express');
 const os = require('os');
-const { body, validationResult } = require('express-validator');
 const database = require('./../database');
 const config = require('./../config');
 
@@ -27,17 +26,16 @@ router.get('/informations', function (req, res) {
     });
 });
 
-router.get('/logs', body('amount').isInt({ min: 1, max: 100 }), (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
+router.get('/logs', (req, res) => {
     database.sql.connect(database.sqlConfig).then((pool) => {
-        pool.query('SELECT TOP ' + req.body.amount + ' * FROM [HydroPoc].[dbo].[events] ORDER BY id DESC')
+        pool.query('SELECT * FROM [HydroPoc].[dbo].[events] ORDER BY id DESC')
             .then((result) => {
-                return res.status(200).json(result.recordset);
+                const logs = { data: [] };
+                result.recordset.forEach((log) => {
+                    logs.data.push([log.id, log.timestamp, log.type, log.message]);
+                });
+
+                return res.status(200).json(logs);
             })
             .catch((selectError) => {
                 console.error(selectError);
