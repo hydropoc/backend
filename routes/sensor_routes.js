@@ -37,7 +37,7 @@ router.get('/data', body('amount').isInt({ min: 1, max: 100 }), (req, res) => {
     }
 
     database.sql.connect(database.sqlConfig).then((pool) => {
-        pool.query('SELECT TOP ' + req.body.amount + ' * FROM [HydroPoc].[dbo].[sensordata] ORDER BY id DESC')
+        pool.query('SELECT TOP ' + req.body['amount'] + ' * FROM [HydroPoc].[dbo].[sensordata] ORDER BY id DESC')
             .then((result) => {
                 return res.status(200).json(result.recordset);
             })
