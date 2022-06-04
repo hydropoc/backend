@@ -14,5 +14,70 @@
     "lightcycle": {
         "startTime": "08:00",
         "endTime": "20:00"
+    },
+    "limits": {
+        "temperature_water": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        },
+        "temperature_air": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        },
+        "humidity": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        },
+        "co2_level": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        },
+        "ph_value": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        },
+        "ec_value": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        },
+        "swimmer_1": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        },
+        "swimmer_2": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        },
+        "swimmer_3": {
+            "upperWarningLimit": 60,
+            "upperControlLimit": 40,
+            "lowerWarningLimit": 60,
+            "lowerControlLimit": 40,
+            "setpoint": 60
+        }
     }
 }
