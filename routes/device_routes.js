@@ -27,7 +27,7 @@ router.get('/informations', function (req, res) {
     });
 });
 
-router.get('/logs', body('search').optional().isString(), (req, res) => {
+router.post('/logs', body('draw').optional().isNumeric(), body('search').optional().isObject(), body('length').optional().isNumeric(), body('start').optional().isNumeric(), (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -37,9 +37,9 @@ router.get('/logs', body('search').optional().isString(), (req, res) => {
     database.sql.connect(database.sqlConfig).then((pool) => {
         pool.query('SELECT * FROM [HydroPoc].[dbo].[events] ORDER BY id DESC')
             .then((result) => {
-                const logs = { draw: 1, recordsTotal: result.recordset.length, recordsFiltered: result.recordset.length, data: [] };
+                const logs = { draw: req.body.draw != undefined ? req.body.draw : 1, recordsTotal: result.recordset.length, recordsFiltered: result.recordset.length, data: [] };
 
-                if (req.body.search == undefined) {
+                if (req.body['search'] == undefined) {
                     result.recordset.forEach((log) => {
                         logs.data.push({
                             id: log.id,
@@ -50,7 +50,7 @@ router.get('/logs', body('search').optional().isString(), (req, res) => {
                     });
                 } else {
                     result.recordset.forEach((log) => {
-                        if (log.message.toLowerCase().includes(req.body.search.toString().toLowerCase())) {
+                        if (log.message.toLowerCase().includes(req.body['search']['value'].toString().toLowerCase())) {
                             logs.data.push({
                                 id: log.id,
                                 timestamp: log.timestamp,
@@ -63,6 +63,8 @@ router.get('/logs', body('search').optional().isString(), (req, res) => {
                     logs.recordsFiltered = logs.data.length;
                 }
 
+                if (req.body['start'] != undefined) logs.data = logs.data.slice(req.body['start'], logs.data.length);
+                if (req.body['length'] != undefined) logs.data = logs.data.splice(0, req.body['length']);
                 return res.status(200).json(logs);
             })
             .catch((selectError) => {
