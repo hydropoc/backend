@@ -1,5 +1,6 @@
 const express = require('express');
 const os = require('os');
+const { body, validationResult } = require('express-validator');
 const database = require('./../database');
 const config = require('./../config');
 
@@ -26,14 +27,41 @@ router.get('/informations', function (req, res) {
     });
 });
 
-router.get('/logs', (req, res) => {
+router.get('/logs', body('search').optional().isString(), (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     database.sql.connect(database.sqlConfig).then((pool) => {
         pool.query('SELECT * FROM [HydroPoc].[dbo].[events] ORDER BY id DESC')
             .then((result) => {
                 const logs = { draw: 1, recordsTotal: result.recordset.length, recordsFiltered: result.recordset.length, data: [] };
-                result.recordset.forEach((log) => {
-                    logs.data.push([log.id, log.timestamp, log.type, log.message]);
-                });
+
+                if (req.body.search == undefined) {
+                    result.recordset.forEach((log) => {
+                        logs.data.push({
+                            id: log.id,
+                            timestamp: log.timestamp,
+                            type: log.type,
+                            message: log.message,
+                        });
+                    });
+                } else {
+                    result.recordset.forEach((log) => {
+                        if (log.message.toLowerCase().includes(req.body.search.toString().toLowerCase())) {
+                            logs.data.push({
+                                id: log.id,
+                                timestamp: log.timestamp,
+                                type: log.type,
+                                message: log.message,
+                            });
+                        }
+                    });
+
+                    logs.recordsFiltered = logs.data.length;
+                }
 
                 return res.status(200).json(logs);
             })
