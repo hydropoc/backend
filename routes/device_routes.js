@@ -75,7 +75,7 @@ router.post('/logs', body('draw').optional().isNumeric(), body('type').optional(
                     }
                 }
 
-                console.log(req.body['order']);
+                console.log('TODO!!! ' + req.body['order']);
 
                 logs.recordsFiltered = logs.data.length;
                 if (req.body['start'] != undefined) logs.data = logs.data.slice(req.body['start'], logs.data.length);
