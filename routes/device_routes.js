@@ -30,7 +30,7 @@ router.get('/logs', (req, res) => {
     database.sql.connect(database.sqlConfig).then((pool) => {
         pool.query('SELECT * FROM [HydroPoc].[dbo].[events] ORDER BY id DESC')
             .then((result) => {
-                const logs = { data: [] };
+                const logs = { draw: 1, recordsTotal: result.recordset.length, recordsFiltered: result.recordset.length, data: [] };
                 result.recordset.forEach((log) => {
                     logs.data.push([log.id, log.timestamp, log.type, log.message]);
                 });
