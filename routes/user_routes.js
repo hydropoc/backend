@@ -93,7 +93,7 @@ router.get('/login', body('username').isLength({ min: 4 }), body('password').isL
                     }
 
                     if (hashResult)
-                        tokenUtils.checkTokenById(result.recordset[0].id).then((tokenExists) => {
+                        tokenUtils.isTokenExisting(result.recordset[0].id).then((tokenExists) => {
                             if (tokenExists) {
                                 tokenUtils.getToken(result.recordset[0].id).then((token) => {
                                     return res.status(200).json({ success: 'user_login', token: token });
