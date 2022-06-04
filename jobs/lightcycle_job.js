@@ -5,18 +5,7 @@ const config = require('./../config');
 
 ora().succeed('[Jobs] Started Lightcycle job');
 
-const time = new Date();
-if (time.getHours() >= parseInt(config.lightcycle.startTime.split(':')[0]) && time.getHours() <= parseInt(config.lightcycle.endTime.split(':')[0])) {
-    if (time.getMinutes() >= parseInt(config.lightcycle.startTime.split(':')[1]) && time.getMinutes() <= parseInt(config.lightcycle.endTime.split(':')[1])) {
-        gpioUtils
-            .toggleLamp(true)
-            .then(() => {
-                ora().succeed("Set lamp to state 'on'");
-            })
-            .catch(() => undefined);
-    }
-}
-
+checkIfTimeIsBetween();
 setInterval(() => {
     const currentTime = new Date();
     const currentHour = currentTime.getHours();
@@ -49,3 +38,25 @@ setInterval(() => {
             .catch(() => undefined);
     }
 }, 60000); // Repeat every 60000 milliseconds (1 minute)
+
+function checkIfTimeIsBetween() {
+    const time = new Date();
+    const timeStart = new Date();
+    const timeEnd = new Date();
+
+    timeStart.setHours(parseInt(config.lightcycle.startTime.split(':')[0]));
+    timeStart.setMinutes(parseInt(config.lightcycle.startTime.split(':')[1]));
+    timeStart.setSeconds(0);
+    timeEnd.setHours(parseInt(config.lightcycle.endTime.split(':')[0]));
+    timeEnd.setMinutes(parseInt(config.lightcycle.endTime.split(':')[1]));
+    timeEnd.setSeconds(0);
+
+    if (time.getTime() >= timeStart.getTime() && time.getTime() <= timeEnd.getTime()) {
+        gpioUtils
+            .toggleLamp(true)
+            .then(() => {
+                ora().succeed("Set lamp to state 'on'");
+            })
+            .catch(() => undefined);
+    }
+}
