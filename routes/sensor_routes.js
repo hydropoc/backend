@@ -39,7 +39,14 @@ router.get('/data', body('amount').isInt({ min: 1, max: 100 }), (req, res) => {
     database.sql.connect(database.sqlConfig).then((pool) => {
         pool.query('SELECT TOP ' + req.body['amount'] + ' * FROM [HydroPoc].[dbo].[sensordata] ORDER BY id DESC')
             .then((result) => {
-                return res.status(200).json(result.recordset);
+                const data = [];
+
+                result.recordset.forEach((sensorData) => {
+                    sensorData['timestamp'] = parseInt(sensorData['timestamp']);
+                    data.push(sensorData);
+                });
+
+                return res.status(200).json(data);
             })
             .catch((selectError) => {
                 console.error(selectError);
