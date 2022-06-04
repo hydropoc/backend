@@ -1,6 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const database = require('./../database');
+const config = require('./../config');
 
 const router = express.Router();
 
@@ -29,24 +30,71 @@ router.post('/adddata', body('temperature_water').isNumeric(), body('temperature
     });
 });
 
-router.get('/data', body('amount').isInt({ min: 1, max: 100 }), (req, res) => {
+router.get('/data', body('amount').isInt({ min: 1, max: 1000 }), (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
+    const data = {
+        averages: {
+            temperature_water: 0,
+            temperature_air: 0,
+            humidity: 0,
+            co2_level: 0,
+            ph_value: 0,
+            ec_value: 0,
+            swimmer_1: 0,
+            swimmer_2: 0,
+            swimmer_3: 0,
+        },
+        sensors: [],
+        pumpactivity: [],
+        limits: config.limits,
+    };
+
     database.sql.connect(database.sqlConfig).then((pool) => {
         pool.query('SELECT TOP ' + req.body['amount'] + ' * FROM [HydroPoc].[dbo].[sensordata] ORDER BY id DESC')
             .then((result) => {
-                const data = [];
-
                 result.recordset.forEach((sensorData) => {
+                    data.averages.temperature_water += sensorData['temperature_water'];
+                    data.averages.temperature_air += sensorData['temperature_air'];
+                    data.averages.humidity += sensorData['humidity'];
+                    data.averages.co2_level += sensorData['co2_level'];
+                    data.averages.ph_value += sensorData['ph_value'];
+                    data.averages.ec_value += sensorData['ec_value'];
+                    data.averages.swimmer_1 += sensorData['swimmer_1'];
+                    data.averages.swimmer_2 += sensorData['swimmer_2'];
+                    data.averages.swimmer_3 += sensorData['swimmer_3'];
+
                     sensorData['timestamp'] = parseInt(sensorData['timestamp']);
-                    data.push(sensorData);
+                    data.sensors.push(sensorData);
                 });
 
-                return res.status(200).json(data);
+                data.averages.temperature_water /= result.recordset.length;
+                data.averages.temperature_air /= result.recordset.length;
+                data.averages.humidity /= result.recordset.length;
+                data.averages.co2_level /= result.recordset.length;
+                data.averages.ph_value /= result.recordset.length;
+                data.averages.ec_value /= result.recordset.length;
+                data.averages.swimmer_1 /= result.recordset.length;
+                data.averages.swimmer_2 /= result.recordset.length;
+                data.averages.swimmer_3 /= result.recordset.length;
+
+                pool.query('SELECT TOP ' + req.body['amount'] + ' * FROM [HydroPoc].[dbo].[pumpactivity] ORDER BY id DESC')
+                    .then((result) => {
+                        result.recordset.forEach((pumpData) => {
+                            pumpData['timestamp'] = parseInt(pumpData['timestamp']);
+                            data.pumpactivity.push(pumpData);
+                        });
+
+                        return res.status(200).json(data);
+                    })
+                    .catch((selectError) => {
+                        console.error(selectError);
+                        return res.status(400).json({ error: 'data_error_reading_activity' });
+                    });
             })
             .catch((selectError) => {
                 console.error(selectError);
