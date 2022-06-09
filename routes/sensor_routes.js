@@ -30,7 +30,7 @@ router.post('/adddata', body('temperature_water').isNumeric(), body('temperature
     });
 });
 
-router.get('/data', body('amount').isInt({ min: 1, max: 1000 }), (req, res) => {
+router.post('/data', body('amount').optional().isInt({ min: 1, max: 1000 }), (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -54,8 +54,10 @@ router.get('/data', body('amount').isInt({ min: 1, max: 1000 }), (req, res) => {
         limits: config.limits,
     };
 
+    const amount = req.body['amount'] == undefined ? 1000 : req.body['amount'];
+
     database.sql.connect(database.sqlConfig).then((pool) => {
-        pool.query('SELECT TOP ' + req.body['amount'] + ' * FROM [HydroPoc].[dbo].[sensordata] ORDER BY id DESC')
+        pool.query('SELECT TOP ' + amount + ' * FROM [HydroPoc].[dbo].[sensordata] ORDER BY id DESC')
             .then((result) => {
                 result.recordset.forEach((sensorData) => {
                     data.averages.temperature_water += sensorData['temperature_water'];
@@ -82,7 +84,7 @@ router.get('/data', body('amount').isInt({ min: 1, max: 1000 }), (req, res) => {
                 data.averages.swimmer_2 /= result.recordset.length;
                 data.averages.swimmer_3 /= result.recordset.length;
 
-                pool.query('SELECT TOP ' + req.body['amount'] + ' * FROM [HydroPoc].[dbo].[pumpactivity] ORDER BY id DESC')
+                pool.query('SELECT TOP ' + amount + ' * FROM [HydroPoc].[dbo].[pumpactivity] ORDER BY id DESC')
                     .then((result) => {
                         result.recordset.forEach((pumpData) => {
                             pumpData['timestamp'] = parseInt(pumpData['timestamp']);
