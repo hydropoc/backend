@@ -70,14 +70,14 @@
             "upperWarningLimit": 100,
             "lowerWarningLimit": 0,
             "lowerControlLimit": 0,
-            "setpoint": 30
+            "setpoint": 0
         },
         "swimmer_3": {
             "upperControlLimit": 300,
             "upperWarningLimit": 100,
             "lowerWarningLimit": 0,
             "lowerControlLimit": 0,
-            "setpoint": 30
+            "setpoint": 0
         }
     }
 }
