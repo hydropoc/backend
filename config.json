@@ -25,8 +25,8 @@
         },
         "temperature_air": {
             "upperControlLimit": 35,
-            "upperWarningLimit": 30,
-            "lowerWarningLimit": 15,
+            "upperWarningLimit": 35,
+            "lowerWarningLimit": 20,
             "lowerControlLimit": 10,
             "setpoint": 22.5
         },
