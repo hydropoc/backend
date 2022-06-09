@@ -17,67 +17,67 @@
     },
     "limits": {
         "temperature_water": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 35,
+            "upperWarningLimit": 30,
+            "lowerWarningLimit": 15,
+            "lowerControlLimit": 10,
+            "setpoint": 22.5
         },
         "temperature_air": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 35,
+            "upperWarningLimit": 30,
+            "lowerWarningLimit": 15,
+            "lowerControlLimit": 10,
+            "setpoint": 22.5
         },
         "humidity": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 75,
+            "upperWarningLimit": 70,
+            "lowerWarningLimit": 30,
+            "lowerControlLimit": 25,
+            "setpoint": 50
         },
         "co2_level": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 1000,
+            "upperWarningLimit": 800,
+            "lowerWarningLimit": 0,
+            "lowerControlLimit": 0,
+            "setpoint": 0
         },
         "ph_value": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 10,
+            "upperWarningLimit": 9,
+            "lowerWarningLimit": 5,
+            "lowerControlLimit": 4,
+            "setpoint": 7
         },
         "ec_value": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 1200,
+            "upperWarningLimit": 1000,
+            "lowerWarningLimit": 500,
+            "lowerControlLimit": 300,
+            "setpoint": 700
         },
         "swimmer_1": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 300,
+            "upperWarningLimit": 100,
+            "lowerWarningLimit": 0,
+            "lowerControlLimit": 0,
+            "setpoint": 0
         },
         "swimmer_2": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 300,
+            "upperWarningLimit": 100,
+            "lowerWarningLimit": 0,
+            "lowerControlLimit": 0,
+            "setpoint": 30
         },
         "swimmer_3": {
-            "upperWarningLimit": 60,
-            "upperControlLimit": 40,
-            "lowerWarningLimit": 60,
-            "lowerControlLimit": 40,
-            "setpoint": 60
+            "upperControlLimit": 300,
+            "upperWarningLimit": 100,
+            "lowerWarningLimit": 0,
+            "lowerControlLimit": 0,
+            "setpoint": 30
         }
     }
 }
