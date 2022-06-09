@@ -11,17 +11,17 @@ console.log('Starting adding random data to mssql server!');
 setInterval(() => {
     axios
         .post(
-            'http://localhost:3000/api/sensor/adddata',
+            'http://api.hydropoc.jongmans.net/api/sensor/adddata',
             JSON.stringify({
-                temperature_water: randomNumber(12, 14),
-                temperature_air: randomNumber(22, 25),
-                humidity: randomNumber(36, 40),
+                temperature_water: randomNumber(20, 25),
+                temperature_air: randomNumber(22, 29),
+                humidity: randomNumber(40, 55),
                 co2_level: Math.floor(randomNumber(500, 600)),
-                ph_value: Math.floor(randomNumber(5, 8)),
-                ec_value: Math.floor(randomNumber(2, 4)),
+                ph_value: Math.floor(randomNumber(5, 7)),
+                ec_value: Math.floor(randomNumber(700, 900)),
                 swimmer_1: 0,
                 swimmer_2: 0,
-                swimmer_3: Math.floor(randomNumber(900, 1000)),
+                swimmer_3: Math.floor(randomNumber(230, 400)),
             }),
             {
                 headers: {
@@ -36,4 +36,4 @@ setInterval(() => {
         .catch((error) => {
             console.error(error);
         });
-}, 500);
+}, 5000);
