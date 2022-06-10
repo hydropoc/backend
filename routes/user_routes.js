@@ -94,15 +94,8 @@ router.post('/login', body('username').isString(), body('password').isString(), 
 
                     if (hashResult)
                         tokenUtils.isTokenExisting(result.recordset[0].id).then((tokenExists) => {
-                            if (tokenExists) {
-                                tokenUtils.getToken(result.recordset[0].id).then((token) => {
-                                    return res.status(200).json({ success: 'user_login', token: token });
-                                });
-                            } else {
-                                tokenUtils.createToken(result.recordset[0].id).then((token) => {
-                                    return res.status(200).json({ success: 'user_login', token: token });
-                                });
-                            }
+                            if (tokenExists) tokenUtils.getToken(result.recordset[0].id).then((token) => res.status(200).json({ success: 'user_login', token: token }));
+                            else tokenUtils.createToken(result.recordset[0].id).then((token) => res.status(200).json({ success: 'user_login', token: token }));
                         });
                     else return res.status(400).json({ error: 'invalid_user_credentials' });
                 });
