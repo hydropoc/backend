@@ -67,7 +67,7 @@ router.post('/register', body('username').isLength({ min: 4 }), body('password')
     });
 });
 
-router.get('/login', body('username').isLength({ min: 4 }), body('password').isLength({ min: 6 }), (req, res) => {
+router.post('/login', body('username').isLength({ min: 4 }), body('password').isLength({ min: 6 }), (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
