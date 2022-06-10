@@ -12,7 +12,7 @@ router.use((req, res, next) => {
     next();
 });
 
-router.post('/register', body('username').isLength({ min: 4 }), body('password').isLength({ min: 6 }), (req, res) => {
+router.post('/register', body('username').isLength({ min: 4 }).isString(), body('password').isLength({ min: 6 }).isString(), (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -67,7 +67,7 @@ router.post('/register', body('username').isLength({ min: 4 }), body('password')
     });
 });
 
-router.post('/login', body('username').isLength({ min: 4 }), body('password').isLength({ min: 6 }), (req, res) => {
+router.post('/login', body('username').isString(), body('password').isString(), (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
