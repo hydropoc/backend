@@ -112,6 +112,10 @@ router.post('/data_sensor', body('sensor').isString(), body('time').isInt({ min:
     const data = {
         average: 0,
         sensors: [],
+        minMax: {
+            minimum: { value: 0, timestamp: 0 },
+            maximum: { value: 0, timestamp: 0 },
+        },
         limits: config.limits[req.body['sensor']],
     };
 
@@ -124,7 +128,13 @@ router.post('/data_sensor', body('sensor').isString(), body('time').isInt({ min:
                     data.sensors.push(sensorData);
                 });
 
+                const values = data.sensors.map((d) => d[req.body['sensor']]);
+
                 data.average /= result.recordset.length;
+                data.minMax.minimum.value = Math.min(...values);
+                data.minMax.maximum.value = Math.max(...values);
+                data.minMax.minimum.timestamp = data.sensors.find((object) => object[req.body['sensor']] == Math.min(...values)).timestamp;
+                data.minMax.maximum.timestamp = data.sensors.find((object) => object[req.body['sensor']] == Math.max(...values)).timestamp;
 
                 return res.status(200).json(data);
             })
