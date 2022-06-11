@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
 
@@ -19,7 +18,6 @@ app.use((error, req, res, next) => {
     } else next();
 });
 
-app.use('/photos', express.static(path.join(__dirname, 'photos')));
 app.use('/api/user', userRoutes);
 app.use('/api/sensor', sensorRoutes);
 app.use('/api/device', deviceRoutes);
