@@ -47,7 +47,6 @@ router.post('/register', body('username').isLength({ min: 4 }).isString(), body(
                                         }
                                     })
                                     .catch((selectError) => {
-                                        console.error(selectError);
                                         return res.status(400).json({ error: 'register_user_selet_error_after_register' });
                                     });
                             } else {
@@ -55,12 +54,10 @@ router.post('/register', body('username').isLength({ min: 4 }).isString(), body(
                             }
                         })
                         .catch((insertError) => {
-                            console.error(insertError);
                             return res.status(400).json({ error: 'register_user_insert_error' });
                         });
                 })
                 .catch((selectError) => {
-                    console.error(selectError);
                     return res.status(400).json({ error: 'register_user_select_error' });
                 });
         });
@@ -101,7 +98,6 @@ router.post('/login', body('username').isString(), body('password').isString(), 
                 });
             })
             .catch((selectError) => {
-                console.error(selectError);
                 return res.status(400).json({ error: 'register_user_select_error' });
             });
     });

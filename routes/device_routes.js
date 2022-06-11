@@ -84,7 +84,6 @@ router.post('/logs', body('draw').optional().isNumeric(), body('type').optional(
                 return res.status(200).json(logs);
             })
             .catch((selectError) => {
-                console.error(selectError);
                 return res.status(400).json({ error: 'data_error_reading_logs' });
             });
     });

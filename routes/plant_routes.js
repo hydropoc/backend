@@ -21,7 +21,6 @@ router.get('/pictures', body('amount').isInt({ min: 1, max: 20 }), (req, res) =>
                 return res.status(200).json(result.recordset);
             })
             .catch((selectError) => {
-                console.error(selectError);
                 return res.status(400).json({ error: 'data_error_reading_images' });
             });
     });
