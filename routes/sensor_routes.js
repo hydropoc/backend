@@ -128,7 +128,7 @@ router.post('/data_sensor', body('sensor').isString(), body('time').isInt({ min:
                     data.sensors.push(sensorData);
                 });
 
-                const values = data.sensors.map((d) => d[req.body['sensor']]);
+                const values = data.sensors.map((object) => object[req.body['sensor']]);
 
                 data.average /= result.recordset.length;
                 data.minMax.minimum.value = Math.min(...values);
