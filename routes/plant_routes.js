@@ -8,7 +8,7 @@ router.use((req, res, next) => {
     next();
 });
 
-router.get('/pictures', body('amount').isInt({ min: 1, max: 20 }), (req, res) => {
+router.post('/pictures', body('startTime').isNumeric(), body('endTime').isNumeric(), (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -16,7 +16,7 @@ router.get('/pictures', body('amount').isInt({ min: 1, max: 20 }), (req, res) =>
     }
 
     database.sql.connect(database.sqlConfig).then((pool) => {
-        pool.query('SELECT TOP ' + req.body['amount'] + ' * FROM [HydroPoc].[dbo].[images] ORDER BY id DESC')
+        pool.query('SELECT * FROM [HydroPoc].[dbo].[images] WHERE timestamp >= ' + req.body['startTime'] + ' AND timestamp <= ' + req.body['endTime'] + ' ORDER BY id DESC')
             .then((result) => {
                 return res.status(200).json(result.recordset);
             })
