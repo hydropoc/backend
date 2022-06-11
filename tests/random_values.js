@@ -11,7 +11,7 @@ console.log('Starting adding random data to mssql server!');
 setInterval(() => {
     axios
         .post(
-            'http://api.hydropoc.jongmans.net/api/sensor/adddata',
+            'http://hydropoc.api.jongmans.net/api/sensor/adddata',
             JSON.stringify({
                 temperature_water: randomNumber(20, 25),
                 temperature_air: randomNumber(22, 29),
