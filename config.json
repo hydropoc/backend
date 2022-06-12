@@ -16,6 +16,17 @@
         "startTime": "08:00",
         "endTime": "17:00"
     },
+    "gpio": {
+        "lamp_pin": 14,
+        "fan_pin": 15,
+        "pump_front": 23,
+        "pump_back": 18,
+        "pump_small_1": 5,
+        "pump_small_2": 6,
+        "pump_small_3": 13,
+        "pump_small_4": 19,
+        "pump_small_5": 26
+    },
     "limits": {
         "temperature_water": {
             "upperControlLimit": 35,
