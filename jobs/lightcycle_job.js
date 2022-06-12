@@ -6,9 +6,15 @@ ora().succeed('[Jobs] Started Lightcycle job');
 
 setInterval(() => {
     if (checkIfTimeIsBetween()) {
-        gpioUtils.setPinState(config.gpio['lamp_pin'], 1);
+        gpioUtils
+            .setPinState(config.gpio['lamp_pin'], 1)
+            .then(() => undefined)
+            .catch(() => undefined);
     } else {
-        gpioUtils.setPinState(config.gpio['lamp_pin'], 0);
+        gpioUtils
+            .setPinState(config.gpio['lamp_pin'], 0)
+            .then(() => undefined)
+            .catch(() => undefined);
     }
 }, 1000);
 
