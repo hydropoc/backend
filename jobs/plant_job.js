@@ -12,8 +12,8 @@ setInterval(() => {
     //gpio utils can be used
     //get current plant profile
     //gpioUtils.togglePump(/* ID (1 - 5) and STATE (1 = ON, 0 = OFF) */);
-    //gpioUtils.toggleVentilation(/* STATE (1 = ON, 0 = OFF) */);
-    //gpioUtils.toggleLamp(/* STATE (1 = ON, 0 = OFF) */);
-    //gpioUtils.togglePumpFront(/* STATE (1 = ON, 0 = OFF) */);
-    //gpioUtils.togglePumpBack(/* STATE (1 = ON, 0 = OFF) */);
+    //gpioUtils.setPinState(config.gpio['fan_pin'], 0 or 1);
+    //gpioUtils.setPinState(config.gpio['lamp_pin'], 0 or 1);
+    //gpioUtils.setPinState(config.gpio['pump_front'], 0 or 1);
+    //gpioUtils.setPinState(config.gpio['pump_back'], 0 or 1);
 }, 3000);
