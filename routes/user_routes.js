@@ -103,4 +103,27 @@ router.post('/login', body('username').isString(), body('password').isString(), 
     });
 });
 
+router.post('/list', body('token').isString(), (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    tokenUtils.isTokenValid(req.body['token']).then((tokenValid) => {
+        if (!tokenValid) return res.status(400).json({ error: 'invalid_token' });
+
+        database.sql.connect(database.sqlConfig).then((pool) => {
+            pool.query('SELECT * FROM [HydroPoc].[dbo].[users]')
+                .then((result) => {
+                    result.recordset.forEach((object) => delete object.password);
+                    return res.status(200).json({ success: 'user_list', users: result.recordset });
+                })
+                .catch((selectError) => {
+                    return res.status(400).json({ error: 'user_list_select_error' });
+                });
+        });
+    });
+});
+
 module.exports = router;
