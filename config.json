@@ -1,12 +1,12 @@
 {
     "version": "1.0.0",
     "port": 3000,
-    "pictureUrl": "http://hydropoc.api.jongmans.net/api/plant/photos/",
+    "pictureUrl": "http://localhost:3000/api/plant/photos/",
     "sqlConfig": {
-        "user": "NodeUser",
-        "password": "aiqu9ahuh9",
-        "database": "HydroPoc",
-        "server": "192.168.100.188",
+        "user": "username",
+        "password": "password",
+        "database": "database",
+        "server": "127.0.0.1",
         "options": {
             "encrypt": true,
             "trustServerCertificate": true
@@ -14,7 +14,7 @@
     },
     "lightcycle": {
         "startTime": "08:00",
-        "endTime": "20:00"
+        "endTime": "17:00"
     },
     "limits": {
         "temperature_water": {
