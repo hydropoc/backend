@@ -22,7 +22,7 @@ function takePhoto() {
             const nextPicture = new Date();
             nextPicture.setSeconds(nextPicture.getSeconds() + config.pictureDelay);
 
-            ora().succeed('[Jobs] Created photo! New photo will be created at ' + fileName);
+            ora().succeed('[Jobs] Created photo! New photo will be created at ' + nextPicture.toLocaleString('de-DE').toString());
             eventUtils.addEvent('success', 'Picture taken');
         })
         .catch((error) => eventUtils.addEvent('error', 'Camera not found - check if camera is connected'));
