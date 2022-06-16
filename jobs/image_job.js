@@ -1,32 +1,29 @@
 const Raspistill = require('node-raspistill').Raspistill;
 const ora = require('ora');
 const eventUtils = require('./../lib/eventUtils');
-
-const camera = new Raspistill();
+const config = require('./../config.json');
 
 ora().succeed('[Jobs] Started Image job');
 
-camera
-    .takePhoto()
-    .then((photo) => {
-        console.log('photo taken, todo!');
-        console.log('add image to db');
+takePhoto();
+setInterval(() => {
+    takePhoto();
+}, config.pictureDelay * 1000);
 
-        eventUtils.addEvent('success', 'Picture taken');
+function takePhoto() {
+    const fileName = ('Wachstum ' + new Date().toLocaleString('de-DE').toString()).replaceAll(':', '-');
 
-        /*
-        database.sql.connect(database.sqlConfig).then((pool) => {
-        pool.query("INSERT INTO [HydroPoc].[dbo].[images] (data, timestamp) VALUES ('" + fileName + "', " + new Date().getTime() + ')')
-            .then((result) => {
-                console.log(result);
-                pool.close();
-            })
-            .catch((selectError) => {
-                console.log(selectError);
-            });
-        });
-        */
+    new Raspistill({
+        encoding: 'png',
+        fileName,
     })
-    .catch((error) => {
-        eventUtils.addEvent('error', 'Camera not found - check if camera is connected');
-    });
+        .takePhoto()
+        .then((photo) => {
+            const nextPicture = new Date();
+            nextPicture.setSeconds(nextPicture.getSeconds() + config.pictureDelay);
+
+            ora().succeed('[Jobs] Created photo! New photo will be created at ' + fileName);
+            eventUtils.addEvent('success', 'Picture taken');
+        })
+        .catch((error) => eventUtils.addEvent('error', 'Camera not found - check if camera is connected'));
+}
