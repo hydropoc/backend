@@ -1,20 +1,24 @@
 const ora = require('ora');
-const gpioUtils = require('./../lib/gpioUtils');
 const config = require('./../config');
+const Gpio = require('onoff').Gpio;
+
+const lamp = new Gpio(config.gpio['lamp_pin'], 'out');
 
 ora().succeed('[Jobs] Started Lightcycle job');
 
 setInterval(() => {
     if (checkIfTimeIsBetween()) {
-        gpioUtils
-            .setPinState(config.gpio['lamp_pin'], 0)
-            .then(() => undefined)
-            .catch(() => undefined);
+        lamp.read()
+            .then((value) => {
+                if (value != 0) lamp.write(0);
+            })
+            .catch((err) => console.log(err));
     } else {
-        gpioUtils
-            .setPinState(config.gpio['lamp_pin'], 1)
-            .then(() => undefined)
-            .catch(() => undefined);
+        lamp.read()
+            .then((value) => {
+                if (value != 1) lamp.write(1);
+            })
+            .catch((err) => console.log(err));
     }
 }, 1000);
 
