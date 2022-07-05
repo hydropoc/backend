@@ -32,7 +32,6 @@
         "mssql": "^8.1.1",
         "node-raspistill": "^2.0.1",
         "nodemon": "^2.0.16",
-        "onoff": "^6.0.3",
         "ora": "^5.4.1"
     }
 }

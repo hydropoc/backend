@@ -1,6 +1,5 @@
 const ora = require('ora');
 const database = require('./../database');
-const gpioUtils = require('./../lib/gpioUtils');
 
 ora().succeed('[Jobs] Started Plant job');
 
