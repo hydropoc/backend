@@ -3,6 +3,7 @@
     "port": 3000,
     "development": true,
     "pictureUrl": "http://localhost:3000/api/plant/photos/",
+    "pictureDelay": 43200,
     "sqlConfig": {
         "user": "username",
         "password": "password",
