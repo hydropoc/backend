@@ -1,13 +1,16 @@
 const ora = require('ora');
+const Gpio = require('onoff').Gpio;
 const config = require('./../config');
+
+const lamp = new Gpio(config['gpio']['lamp_pin'], 'out');
 
 ora().succeed('[Jobs] Started Lightcycle job');
 
 setInterval(() => {
     if (checkIfTimeIsBetween()) {
-        console.log('Turn on');
+        lamp.writeSync(1);
     } else {
-        console.log('Turn off');
+        lamp.writeSync(0);
     }
 }, 1000);
 
