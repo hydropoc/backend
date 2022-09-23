@@ -1,10 +1,11 @@
 const ora = require('ora');
 const config = require('./../config');
+const gpioUtils = require('./../gpioUtils');
 
 ora().succeed('[Jobs] Started Lightcycle job');
 
 setInterval(() => {
-    console.log('Lampe ' + (checkIfTimeIsBetween() ? 'Aktiv' : 'Inaktiv'));
+    gpioUtils.ports.socketBottomRight.writeSync(checkIfTimeIsBetween() ? 1 : 0);
 }, 1000);
 
 function checkIfTimeIsBetween() {
