@@ -5,15 +5,21 @@ const config = require('./../config.json');
 
 ora().succeed('[Jobs] Started Image job');
 
+var lastImage = new Date(null);
 const camera = new Raspistill({
     encoding: 'png',
     fileName: '',
 });
 
-takePhoto();
 setInterval(() => {
-    takePhoto();
-}, config.pictureDelay * 1000);
+    const currentTime = new Date();
+
+    if ((currentTime.getTime() - lastImage.getTime()) / 1000 > config.pictureDelay) {
+        lastImage = currentTime;
+
+        takePhoto();
+    }
+}, 1000);
 
 function takePhoto() {
     camera.setOptions({
